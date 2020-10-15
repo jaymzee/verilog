@@ -2,7 +2,7 @@
 module lfsr_tb();
 
 logic clk, rst_;
-logic out;
+logic [1:0] data;
 
 initial begin
     $dumpfile("lfsr.vcd");
@@ -19,7 +19,13 @@ always #5 clk = ~clk;
 lfsr #(5, 'h12, 'h9) U1(
     .clk(clk),
     .rst_(rst_),
-    .out(out)
+    .out(data[0])
+);
+
+lfsr #(5, 'h1D, 'hC) U2(
+    .clk(clk),
+    .rst_(rst_),
+    .out(data[1])
 );
 
 endmodule
