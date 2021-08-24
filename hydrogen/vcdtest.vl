@@ -1,0 +1,22 @@
+`timescale 1us/10ns
+module top;
+
+wire z;
+reg y;
+
+assign #10 z = ~y;
+
+initial
+ begin
+   $dumpfile("foo.vcd");
+   $dumpvars(1,top);
+   y = 1;
+   #100
+   y = 0;
+   #100
+   y = 1;
+   #100
+   y = 0;
+ end
+ 
+endmodule

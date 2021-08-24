@@ -1,0 +1,24 @@
+`timescale 1us/10ns
+module adder_using_assign();
+    reg a, b;
+    wire sum, carry;
+    wire sum1, carry1;
+    
+    assign #(1) sum1 = a | b; 
+    assign #3 sum = sum1;
+    assign #3 carry = carry1;
+    
+    initial begin
+      $dumpfile("bar.vcd");
+      $dumpvars(1,adder_using_assign);
+      $monitor ($time," A = %b  B = %b CARRY = %b SUM = %b",a,b,carry,sum);
+      #10  
+      a = 0;
+      b = 0;
+      #10   a = 1;
+      #10   b = 1;
+      #10   a = 0;
+      #10   b = 0;
+    end
+    
+endmodule 

@@ -1,0 +1,26 @@
+module dtest();
+  reg a,b,c;
+  initial begin
+    $dumpfile("foo.vcd");
+    $dumpvars(1, dtest);
+    $monitor($time, " a=%b, b=%b, c=%b",a,b,c);
+    a = 0;
+    b = 0;
+    c = 0;
+    #10
+    b = 1;
+    #10
+    a = 1;
+    #10
+    b = 0;
+    #10
+    a = 0;
+    
+  end
+  
+  always @(posedge a)
+    begin
+      c <= #1 b;
+    end
+    
+endmodule

@@ -1,0 +1,27 @@
+module test1();
+  reg x,y;
+  wire z;
+  
+  initial begin
+    $monitor($time, " x=%b, y=%b, z=%b", x,y,z);
+    x = 0;
+    y = 0;
+    #10
+    x = 1;
+    #10
+    y = 1;
+    #10
+    x = 0;
+    #10
+    y = 0;
+  end
+
+  part1 p1(z,x,y);
+endmodule
+
+module part1(o, a, b);
+  output o;
+  input a,b;
+
+  assign #1 o = a | b;
+endmodule

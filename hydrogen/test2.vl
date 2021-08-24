@@ -1,0 +1,22 @@
+module test2();
+  reg clk;
+  reg clk2;
+  integer i;
+      
+  initial begin    
+    $display("Hello");
+    $dumpfile("test2.vcd");
+    $dumpvars(1,test2);
+    $monitor($time, " clk=%b clk2=%b i=%d", clk, clk2, i);
+    clk=0;
+    clk2=1;
+    for (i =0; i<20; i=i+1) begin
+      #5 clk = !clk;  
+    end    
+    $finish();
+  end 
+  
+  always 
+    #2 clk2=!clk2;
+  
+endmodule
