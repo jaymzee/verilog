@@ -9,7 +9,7 @@ initial begin
     $display("                 ABCDEFG");
     $monitor("data %d segments %b", data, segments);
     data = 0;
-    #50 $finish();
+    #75 $finish();
 end
 
 always #5 data = data + 1;

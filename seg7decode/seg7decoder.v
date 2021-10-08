@@ -15,6 +15,12 @@ always @(*) begin
     7:  segments = 7'b1110000;
     8:  segments = 7'b1111111;
     9:  segments = 7'b1110011;
+    10: segments = 7'b1110111;
+    11: segments = 7'b0011111;
+    12: segments = 7'b1001111;
+    13: segments = 7'b0111101;
+    14: segments = 7'b1001111;
+    15: segments = 7'b1000111;
     default:
         segments = 7'b0000000;
     endcase
