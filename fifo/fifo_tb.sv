@@ -8,13 +8,13 @@ logic rd;
 logic wr;
 logic en;
 logic rst;
-logic [31:0] dataIn;
+logic [7:0] dataIn;
 
-logic [31:0] dataOut;
+logic [7:0] dataOut;
 logic empty;
 logic full;
 
-fifo uut(
+fifo #(.DWIDTH(8), .AWIDTH(3)) U1(
     .clk(clk),
     .dataIn(dataIn),
     .rd(rd),
@@ -42,14 +42,14 @@ initial begin
     rst = 1;
 #20 rst = 0;
     wr = 1;
-    dataIn = 32'h0;
-#20 dataIn = 32'h1;
-#20 dataIn = 32'h2;
-#20 dataIn = 32'h3;
-#20 dataIn = 32'h4;
-#20 dataIn = 32'h5;
-#20 dataIn = 32'h6;
-#20 dataIn = 32'h7;
+    dataIn = 0;
+#20 dataIn = 1;
+#20 dataIn = 2;
+#20 dataIn = 3;
+#20 dataIn = 4;
+#20 dataIn = 5;
+#20 dataIn = 6;
+#20 dataIn = 7;
 #20 wr = 0;
     rd = 1;
 #200
