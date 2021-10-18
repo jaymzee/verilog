@@ -9,7 +9,7 @@ logic   gnt1;
 wire    gnt0;
 
 // Clock generator
-always #1 clk = ~clk;
+always #10 clk = ~clk;
 
 initial begin
     $dumpfile ("arbiter.vcd");
@@ -18,7 +18,7 @@ initial begin
     rst = 1;
     req0 = 0;
     req1 = 0;
-#10 rst = 0;
+#100 rst = 0;
     repeat (1) @(negedge clk);
     req0 <= 1;
     repeat (1) @(negedge clk);
@@ -34,11 +34,11 @@ initial begin
     req1 <= 0;
     repeat (1) @(negedge clk);
     repeat (1) @(negedge clk);
-#10 $finish;
+#100 $finish;
 end 
 
 // Connect the DUT
-arbiter U (
+arbiter U1 (
     .clock(clk),
     .reset(rst),
     .req_1(req1),

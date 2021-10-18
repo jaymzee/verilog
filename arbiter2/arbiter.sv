@@ -11,48 +11,68 @@ output logic gnt_0      , // Grant 0
 output logic gnt_1
 );
 
-//=============Internal Constants======================
 parameter SIZE = 3;
-parameter IDLE = 3'b001, GNT0 = 3'b010, GNT1 = 3'b100;
+parameter IDLE = 3'b100, GNT0 = 3'b001, GNT1 = 3'b010;
 
-//=============Internal Variables======================
 logic [SIZE-1:0] state;      // Seq part of the FSM
 logic [SIZE-1:0] next_state; // combo part of FSM
 
-//==========Code startes Here==========================
+// FSM outputs
+// state is 1-hot encoded, so gnt line logic is trivial
+// model combinational logic with inertial delay
+assign #1 gnt_0 = state[0];
+assign #1 gnt_1 = state[1];
+
+/*
+ * alternatively can use always blocks to model combinational logic
+ * but delays should still be modeled using continuous assignment.
+ * So it's often simpler to just use continuous assignment for combo
+ * logic unless that logic is complex.
+ *
+always_comb begin
+    case(state)
+    GNT0:   begin
+                gnt_0 = 1;
+                gnt_1 = 0;
+            end
+    GNT1:   begin
+                gnt_0 = 0;
+                gnt_1 = 1;
+            end
+    default:begin  // IDLE
+                gnt_0 = 0;
+                gnt_1 = 0;
+            end
+    endcase
+end
+*/
+
+// FSM next state
+// model ff output with transport delay
 always_ff @(posedge clock) begin : FSM
-    if (reset == 1'b1) begin
+    if (reset == 1'b1)
         state <= IDLE;
-        gnt_0 <= 0;
-        gnt_1 <= 0;
-    end else
+    else
         case(state)
         IDLE:
-            if (req_0 == 1'b1) begin
-                state <= GNT0;
-                gnt_0 <= 1;
-            end else if (req_1 == 1'b1) begin
-                gnt_1 <= 1;
-                state <= GNT1;
-            end else begin
-                state <= IDLE;
-            end
+            if (req_0 == 1'b1)
+                state <= #1 GNT0;
+            else if (req_1 == 1'b1)
+                state <= #1 GNT1;
+            else
+                state <= #1 IDLE;
         GNT0:
-            if (req_0 == 1'b1) begin
-                state <= GNT0;
-            end else begin
-                gnt_0 <= 0;
-                state <= IDLE;
-            end
+            if (req_0 == 1'b1)
+                state <= #1 GNT0;
+            else
+                state <= #1 IDLE;
         GNT1:
-            if (req_1 == 1'b1) begin
-                state <= GNT1;
-            end else begin
-                gnt_1 <= 0;
-                state <= IDLE;
-            end
+            if (req_1 == 1'b1)
+                state <= #1 GNT1;
+            else
+                state <= #1 IDLE;
         default:
-            state <= IDLE;
+            state <= #1 IDLE;
         endcase
 end
 
