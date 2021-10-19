@@ -46,9 +46,10 @@ initial begin
     end
     wr = 0;
     rd = 1;
-#160
+#165
     rd = 0;
-    en = 0;
+#5  en = 0;
+#10;
 #40 en = 1;
     wr = 1;
     dataIn = 8'hf;
@@ -57,8 +58,9 @@ initial begin
         rd = 1;
     end
 #20 wr = 0;
-#20 rd = 0;
-#40 $finish();
+#25 rd = 0;
+#5  en = 0;
+#50 $finish();
 end
 
 endmodule

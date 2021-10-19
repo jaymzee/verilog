@@ -18,29 +18,35 @@ localparam HIZ = {DWIDTH{1'bz}};
 logic [AWIDTH:0] count = 0;
 logic [AWIDTH-1:0] rd_addr = 0, wr_addr = 0;
 logic [DWIDTH-1:0] fifo[DEPTH-1:0];
+logic [DWIDTH-1:0] out = 0;
 
 assign empty = (count == 0) ? 1 : 0;
 assign full = (count == DEPTH) ? 1 : 0;
 
-always @(posedge clk, posedge rst) begin
+always_comb begin
+    if (en && rd)
+        dataOut = out;
+    else
+        dataOut = HIZ;
+end
+
+always_ff @(posedge clk, posedge rst) begin
     if (rst)
         begin
             rd_addr <= 0;
             wr_addr <= 0;
             count <= 0;
-            dataOut <= HIZ;
+            out <= 0;
         end
     else if (en)
         begin
             if (rd && count > 0)
                 begin
-                    dataOut <= fifo[rd_addr];
+                    out <= fifo[rd_addr];
                     rd_addr <= (rd_addr + 1) % DEPTH;
                     if (!wr)
                         count <= count - 1;
                 end
-            else
-                dataOut <= HIZ;
 
             if (wr && count < DEPTH)
                 begin
@@ -50,8 +56,6 @@ always @(posedge clk, posedge rst) begin
                         count <= count + 1;
                 end
         end
-    else
-        dataOut <= HIZ;
 end
 
 endmodule
