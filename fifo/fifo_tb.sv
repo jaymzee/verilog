@@ -1,4 +1,4 @@
-`timescale 1ns / 100ps
+`timescale 1ns / 1ns
 `include "fifo.sv"
 
 module fifo_tb;
@@ -32,28 +32,33 @@ initial begin
     $dumpfile("fifo.vcd");
     $dumpvars(0, fifo_tb);
     clk = 0;
-    dataIn = 32'h0;
+    dataIn = 0;
     rd = 0;
     wr = 0;
     en = 0;
     rst = 1;
-#40
-    en = 1;
-    rst = 1;
 #20 rst = 0;
+#20 en = 1;
     wr = 1;
-    dataIn = 0;
-#20 dataIn = 1;
-#20 dataIn = 2;
-#20 dataIn = 3;
-#20 dataIn = 4;
-#20 dataIn = 5;
-#20 dataIn = 6;
-#20 dataIn = 7;
-#20 wr = 0;
+    for (int i = 1; i <= 8; i++) begin
+        dataIn = i;
+        #20;
+    end
+    wr = 0;
     rd = 1;
-#200
-    $finish();
+#160
+    rd = 0;
+    en = 0;
+#40 en = 1;
+    wr = 1;
+    dataIn = 8'hf;
+    for (int i = 8'he; i >= 8; i--) begin
+    #20 dataIn = i;
+        rd = 1;
+    end
+#20 wr = 0;
+#20 rd = 0;
+#40 $finish();
 end
 
 endmodule
