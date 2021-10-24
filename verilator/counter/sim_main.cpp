@@ -6,11 +6,10 @@ int main(int argc, char *argv[], char *env[]) {
     Verilated::commandArgs(argc, argv);
     Vcounter *top = new Vcounter();
 
-    Verilated::traceEverOn(true);
-    VerilatedVcdC* tfp = new VerilatedVcdC();
-
-    top->trace(tfp, 99);
-    tfp->open("counter.vcd");
+    Verilated::traceEverOn(true);   // compute traced signals
+    VerilatedVcdC* vcd = new VerilatedVcdC();
+    top->trace(vcd, 99);        // trace 99 levels of hierarchy
+    vcd->open("counter.vcd");   // dump file
 
     int time = 0;
 
@@ -19,27 +18,32 @@ int main(int argc, char *argv[], char *env[]) {
     top->en_ = 1;
     top->up = 1;
     top->eval();
-    tfp->dump(time++);
+    vcd->dump(time++);
+
     top->rst_ = 0;
     top->eval();
-    tfp->dump(time++);
+    vcd->dump(time++);
+
     top->rst_ = 1;
     top->eval();
-    tfp->dump(time++);
+    vcd->dump(time++);
+
     top->en_ = 0;
     top->eval();
-    tfp->dump(time++);
+    vcd->dump(time++);
 
     for (int i = 0; i < 16; i++) {
         top->clk = 1;
         top->eval();
-        tfp->dump(time++);
+        printf("%d: %d\n", time, top->count);
+        vcd->dump(time++);
+
         top->clk = 0;
         top->eval();
-        tfp->dump(time++);
+        vcd->dump(time++);
     }
 
-    tfp->close();
+    vcd->close();
     delete top;
     exit(0);
 }
