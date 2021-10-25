@@ -3,7 +3,7 @@
 // FPGA projects, VHDL projects, Verilog projects
 // Verilog code for RISC Processor
 // Verilog code for Control Unit
-module Control_Unit(
+module ControlUnit(
     input[3:0] opcode,
     output reg[1:0] alu_op,
     output reg jump, beq, bne, mem_read, mem_write, alu_src, reg_dst, mem_to_reg, reg_write

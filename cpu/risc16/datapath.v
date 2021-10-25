@@ -28,7 +28,7 @@ wire [2:0] reg_read_addr_2;
 wire [15:0] reg_read_data_2;
 wire [15:0] ext_im,read_data2;
 wire [2:0] alu_control;
-wire [15:0] ALU_out;
+wire [15:0] alu_out;
 wire zero_flag;
 wire [15:0] PC_j, PC_beq, PC_2beq, PC_2bne, PC_bne;
 wire beq_control;
@@ -47,7 +47,7 @@ end
 assign pc2 = pc_current + 16'd2;
 
 // instruction memory
-Instruction_Memory im(.pc(pc_current), .instruction(instr));
+InstructionMemory intr_mem(.pc(pc_current), .instruction(instr));
 
 // jump shift left 2
 assign jump_shift = {instr[11:0], 1'b0};
@@ -60,7 +60,7 @@ assign reg_read_addr_1 = instr[11:9];
 assign reg_read_addr_2 = instr[8:6];
 
 // GENERAL PURPOSE REGISTERs
-GPRs reg_file
+RegisterFile reg_file
 (
     .clk(clk),
     .reg_write_en(reg_write),
@@ -90,7 +90,7 @@ Alu alu_unit(
     .a(reg_read_data_1),
     .b(read_data2),
     .alu_control(alu_control),
-    .result(ALU_out),
+    .result(alu_out),
     .zero(zero_flag)
 );
 
@@ -110,10 +110,10 @@ assign PC_j = {pc2[15:13], jump_shift};
 assign pc_next = (jump == 1'b1) ? PC_j : PC_2bne;
 
 // Data memory
-Data_Memory dm
+DataMemory data_mem
 (
     .clk(clk),
-    .mem_access_addr(ALU_out),
+    .mem_access_addr(alu_out),
     .mem_write_data(reg_read_data_2),
     .mem_write_en(mem_write),
     .mem_read(mem_read),
@@ -121,7 +121,7 @@ Data_Memory dm
 );
 
 // write back
-assign reg_write_data = (mem_to_reg == 1'b1) ? mem_read_data : ALU_out;
+assign reg_write_data = (mem_to_reg == 1'b1) ? mem_read_data : alu_out;
 // output to control unit
 assign opcode = instr[15:12];
 

@@ -3,7 +3,7 @@
 // FPGA projects, VHDL projects, Verilog projects 
 // Verilog code for RISC Processor 
 // Verilog code for Instruction Memory
-module Instruction_Memory(
+module InstructionMemory(
     input[15:0] pc,
     output[15:0] instruction
 );

@@ -12,12 +12,12 @@ input [1:0] alu_op;
 input [3:0] opcode;
 output reg[2:0] alu_control;
 
-wire [5:0] ALUControlIn;
+wire [5:0] alu_ctrl_in;
 
-assign ALUControlIn = {alu_op, opcode};
+assign alu_ctrl_in = {alu_op, opcode};
 
-always @(ALUControlIn)
-    casex (ALUControlIn)
+always @(alu_ctrl_in)
+    casex (alu_ctrl_in)
     6'b10xxxx: alu_control = 3'b000;
     6'b01xxxx: alu_control = 3'b001;
     6'b000010: alu_control = 3'b000;

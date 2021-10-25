@@ -32,7 +32,7 @@ Datapath_Unit DU
 );
 
 // control unit
-Control_Unit control (
+ControlUnit control (
     .opcode(opcode),
     .reg_dst(reg_dst),
     .mem_to_reg(mem_to_reg),

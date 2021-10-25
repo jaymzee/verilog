@@ -3,7 +3,7 @@
 // FPGA projects, VHDL projects, Verilog projects
 // Verilog code for RISC Processor
 // Verilog code for register file
-module GPRs(
+module RegisterFile(
     input clk,
 
     // write port

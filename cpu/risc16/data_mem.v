@@ -3,7 +3,7 @@
 // FPGA projects, VHDL projects, Verilog projects 
 // Verilog code for RISC Processor 
 // Verilog code for data Memory
-module Data_Memory(
+module DataMemory(
     input clk,
 
     // address input, shared by read and write port
