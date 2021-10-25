@@ -8,26 +8,24 @@
 // Verilog testbench code to test the processor
 module test_Risc_16_bit;
 
- // Inputs
- reg clk;
+// Inputs
+reg clk;
 
- // Instantiate the Unit Under Test (UUT)
- Risc_16_bit uut (
-  .clk(clk)
- );
+// Instantiate the Unit Under Test (UUT)
+Risc_16_bit uut (
+    .clk(clk)
+);
 
- initial 
-  begin
+initial begin
     $dumpfile("risc16.vcd");
     $dumpvars(0, test_Risc_16_bit);
-   clk <=0;
-   `simulation_time;
-   $finish;
-  end
+    clk = 0;
+    `SIMULATION_TIME;
+    $finish;
+end
 
- always 
-  begin
-   #5 clk = ~clk;
-  end
+always begin
+#5  clk = ~clk;
+end
 
 endmodule
