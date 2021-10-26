@@ -41,7 +41,44 @@ C. Control Flow Instructions
     `JMP offset Jump to {PC [15:13], (offset << 1)}`
 
 
-![Instruction Format](doc/img/Instr_Format.png)
+# Instruction Format
+    Memory Access: Load
+    | op  | Rs1 | Ws  |  offset  |
+       4     3     3       6
+
+    Memory Access: Store
+    | op  | Rs1 | Rs2 |  offset  |
+       4     3     3       6
+
+    Data Processing
+    | op  | Rs1 | Rs2 | Ws  | -- |
+       4     3     3     3    3
+
+    Branch
+    | op  | Rs1 | Rs2 |  offset  |
+       4     3     3       6
+
+    Jump
+    | op  |        offset        |
+       4             12
+
+| op | operation               |
+|---:|:------------------------|
+| 00 | Load Word               |
+| 01 | Store Word              |
+| 02 | Add                     |
+| 03 | Subtract                |
+| 04 | Invert (1's complement) |
+| 05 | Logical Shift Left      |
+| 06 | Logical Shift Right     |
+| 07 | BITWISE AND             |
+| 08 | BITWISE OR              |
+| 09 | Set on Less Than        |
+| 10 | Hamming Distance        |
+| 11 | Branch on Equal         |
+| 12 | Branch on Not Equal     |
+| 13 | Jump                    |
+
 
 # Processor Control Unit Design:
 |Instruction|reg dst|ALU src|Memto reg|reg wr|mem rd|mem wr|branch|ALU op|Jump|
@@ -55,7 +92,7 @@ C. Control Flow Instructions
 
 # ALU Control Unit Design:
 |ALU op|opcode|ALUcnt|ALU operation|instruction|
-|:----:|:----:|:----:|:-----------:|:---------:|
+|:----:|:----:|:----:|:-----------:|:----------|
 |  10  | xxxx | 000  |     ADD     |   LW,SW   |
 |  01  | xxxx | 001  |     SUB     |  BEQ,BNE  |
 |  00  | 0002 | 000  |     ADD     |D-type: ADD|
